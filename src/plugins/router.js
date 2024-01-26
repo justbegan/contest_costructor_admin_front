@@ -4,13 +4,19 @@ import CreateStatement from '@/components/CreateStatement.vue'
 import StatementsList from '@/components/StatementsList.vue'
 import CreateParameter from '@/components/CreateParameter.vue'
 import CreateClass from '@/components/CreateClass.vue'
+import SchemaList from '@/components/SchemaList.vue'
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'create_statment',
+    name: 'schema_list',
+    component: SchemaList
+  },
+  {
+    path: '/create_statement',
+    name: 'create_statement',
     component: CreateStatement
   },
   {
