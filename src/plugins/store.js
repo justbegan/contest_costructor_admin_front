@@ -12,6 +12,7 @@ export default new Vuex.Store({
     snackbarError: false,
     snackbarText: "Hello yo",
     vertical: true,
+    sureDialog: false
   },
   mutations: {
     // Мутации изменяют состояние синхронно

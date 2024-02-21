@@ -50,25 +50,27 @@
                         <v-btn color="primary" @click="dialog=true">Добавить параметр</v-btn>
                     </div>
                     <v-text-field v-model="parameterFind" label="Поиск по title и ключу"></v-text-field>
-                    <draggable :list="parametersResult" :options="{ group: 'items', ghostClass: 'ghost' }" class="draggable-list" >
-                        <div v-for="(item, index) in parametersResult" :key="index" class="draggable-item">
-                            <div v-if="required_fields.includes(getUnknowKey(item))" style="background-color: rgb(165, 55, 55);">
-                                <h4 class="text-center">{{ getUnknowKey(item) }}</h4><br>
-                                <vue-json-pretty :data="item" :deep="1"/>
+                    <div class="scrollable-container">
+                        <draggable :list="parametersResult" :options="{ group: 'items', ghostClass: 'ghost' }" class="draggable-list" >
+                            <div v-for="(item, index) in parametersResult" :key="index" class="draggable-item">
+                                <div v-if="required_fields.includes(getUnknowKey(item))" style="background-color: rgb(165, 55, 55);">
+                                    <h4 class="text-center">{{ getUnknowKey(item) }}</h4><br>
+                                    <vue-json-pretty :data="item" :deep="1"/>
+                                </div>
+                                <div v-else>
+                                    <h4 class="text-center">{{ getUnknowKey(item) }}</h4><br>
+                                    <vue-json-pretty :data="item" :deep="1"/>
+                                </div>
                             </div>
-                            <div v-else>
-                                <h4 class="text-center">{{ getUnknowKey(item) }}</h4><br>
-                                <vue-json-pretty :data="item" :deep="1"/>
-                            </div>
-                        </div>
-                    </draggable>
-                </div>
+                        </draggable>
+                    </div>
+                    </div>
             </v-col>
             <v-col>
-                <div class="block">
+                <div class="block" >
                     <h2 class="text-center">Моя схема</h2>
                     <div class="text-right mb-2">
-                        <v-btn @click="createSchema" color="primary">Добавить схему</v-btn>
+                        <v-btn @click="updateSchema" color="primary">Обновить схему</v-btn>
                     </div>
                     <v-row>
                         <v-col>
@@ -78,8 +80,9 @@
                             <v-select :items=contests label="Конкурс" item-text="title" item-value="_id" v-model="schemaContest"></v-select>
                         </v-col>
                     </v-row>
-                    <draggable v-model="list2" :options="{ group: 'items', ghostClass: 'ghost' }" class="draggable-list2">
-                        <div v-for="(item, index) in list2" :key="index" class="draggable-item2">
+                    <div class="scrollable-container">
+                        <draggable v-model="list2" :options="{ group: 'items', ghostClass: 'ghost' }" class="draggable-list2">
+                        <div v-for="(item, index) in list2" :key="index" class="draggable-item2 ">
                             <div class="item-content">
                                 <h4 class="text-center">{{ getUnknowKey(item) }}</h4><br>
                                 <vue-json-pretty :data="item" :deep="1"/>
@@ -88,6 +91,7 @@
                             </div>
                         </div>
                     </draggable>
+                    </div>
                 </div>
             </v-col>
         </v-row>
@@ -111,14 +115,14 @@
         },
         data() {
             return {
-                required_fields: ['user_oid'],
+                required_fields: ['user_oid', 'status', 'docs'],
                 dialog: false,
                 list1: [],
                 list2: [],
                 parameterKey: "",
                 parameterTitle: "",
                 parameterType: "",
-                parameterTypes: ["string", "number", "integer", "object", "array", "boolean", "docs"],
+                parameterTypes: ["string", "number", "integer", "object", "array", "boolean"],
                 contests: [],
                 schemaTitle: "",
                 schemaContest: "",
@@ -129,25 +133,25 @@
                 vertical: true,
                 json: {
                     "var_name": {
-                        "title": "Расшифровка денежного вклада спонсоров",
-                        "description": "расшифровывается сумма строки 3 таблицы",
+                        "title": "Название",
+                        "description": "Описание",
                         "type": "array",
                         "sub_type": "table",
                         "items": {
                             "type": "object",
                             "properties": {
-                                "organization_name": {
+                                "var1": {
                                     "type": "string",
-                                    "title": "Наименование организации"
+                                    "title": "Название"
                                 },
-                                "price": {
+                                "var2": {
                                     "type": "number",
-                                    "title": "Денежный вклад(руб.)"
+                                    "title": "Название2"
                                 }
                             },
                             "required": [
-                                "source_type",
-                                "price"
+                                "var1",
+                                "var2"
                             ]
                         }
                     }
@@ -160,7 +164,7 @@
                 // text field or text area field
                 stringTypeArea: false,
                 jsonType: false,
-                parameterFind: ""
+                parameterFind: "",
             };
         },
         methods: {
@@ -209,9 +213,9 @@
                 let result = await response.json();
                 this.classList = result.data
             },
-            createSchema: async function () {
-                let response = await fetch('http://127.0.0.1:8000/schema/create_schema', {
-                    method: 'POST',
+            updateSchema: async function () {
+                let response = await fetch('http://127.0.0.1:8000/schema/update_schema?id=' + this.$route.params.id, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8',
                     },
@@ -226,7 +230,7 @@
                     ),
                 });
                 if (response.ok) {
-                    this.$store.state.snackbarText = "Параметр создан"
+                    this.$store.state.snackbarText = "Схема обновлена"
                     this.$store.state.snackbar = true
                 } else {
                     let json = await response.json();
@@ -244,6 +248,17 @@
                     }
                 }
                 return required
+            },
+            handleRequiredFileds: function (required){
+                for(let i in required){
+                    for(let obj in this.list2){
+  
+                        if(required[i] == this.getUnknowKey(this.list2[obj])){
+                            this.list2[obj][this.getUnknowKey(this.list2[obj])].sub_required = true
+                        }
+
+                    }
+                }
             },
             getProperties: function () {
                 let properties = {}
@@ -295,6 +310,15 @@
 
                 return filteredObject;
             },
+            getSelectedParameter: async function (){
+                let url = 'http://127.0.0.1:8000/schema/get_parameter_by_id?id=' + this.$route.params.id;
+                let response = await fetch(url);
+                let result = await response.json();
+                this.list2 =  Object.keys(result.data.properties).map(key => ({ [key]: result.data.properties[key] }))
+                this.schemaTitle = result.data.title
+                this.schemaContest = result.data.contest_oid
+                this.handleRequiredFileds(result.data.required)
+            }
         },
         computed: {
             parametersResult() {
@@ -316,6 +340,7 @@
             this.getParameters()
             this.getContests()
             this.getClass()
+            this.getSelectedParameter()
         }
     };
 </script>
@@ -342,7 +367,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .draggable-item2 {
-        width: calc(50% - 20px); /* Устанавливаем ширину элемента в 1/3 ширины контейнера */
+        width: calc(30% - 20px); /* Устанавливаем ширину элемента в 1/3 ширины контейнера */
         box-sizing: border-box; /* Учитываем padding и border в общей ширине элемента */
         margin: 10px; /* Добавляем отступы между элементами */
         display: inline-block; /* Делаем элементы строчно-блочными, чтобы они располагались в одну линию */
@@ -353,7 +378,7 @@
     }
     .ghost {
         opacity: 0.5;
-        width: calc(50% - 20px); /* Устанавливаем ширину элемента в 1/3 ширины контейнера */
+        width: calc(30% - 20px); /* Устанавливаем ширину элемента в 1/3 ширины контейнера */
         box-sizing: border-box; /* Учитываем padding и border в общей ширине элемента */
         margin: 10px; /* Добавляем отступы между элементами */
         display: inline-block; /* Делаем элементы строчно-блочными, чтобы они располагались в одну линию */
@@ -367,6 +392,13 @@
     }
     .ace-jsoneditor{
         height: 500px !important;
+    }
+        /* Стили для контейнера */
+    .scrollable-container {
+        width: 100%; /* Ширина контейнера */
+        height: 900px; /* Высота контейнера */
+        overflow-y: scroll; /* Позволяет прокручивать по вертикали */
+        border: 1px solid #ccc; /* Граница для визуализации */
     }
 </style>
   

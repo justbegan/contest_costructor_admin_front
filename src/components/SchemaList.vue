@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <v-btn href="http://127.0.0.1:8080/create_parameter">Добавить новую схему</v-btn>
         <v-simple-table>
             <template v-slot:default>
             <thead>
@@ -16,15 +17,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in schemasList" :key="item.name" @click="getSchemaByContestOid(item.contest_oid)">
+                <tr v-for="item in schemasList" :key="item.name" @click="getSchemaByContestOid(item._id)">
                 <td>{{ item.title }}</td>
-                <td>{{ getContestNameById(item.contest_oid).title }}</td>
-                <td>{{ getContestNameById(item.contest_oid).statements_count }}</td>
+                <td>{{ getContestNameById(item.contest_oid)?.title }}</td>
+                <td>{{ getContestNameById(item.contest_oid)?.statements_count }}</td>
                 </tr>
             </tbody>
             </template>
         </v-simple-table>
-        {{ selectedSchema }}
     </v-container>
 </template>
 
@@ -56,10 +56,7 @@ export default {
             return item ? item : null;
         },
         getSchemaByContestOid: async function (id) {
-            let url = 'http://127.0.0.1:8000/schema/get_schema?contest_oid=' + id
-            let response = await fetch(url);
-            let result = await response.json();
-            this.selectedSchema = result.data
+            window.location.href = 'http://127.0.0.1:8080/change_parameter/' + id;
         }
     },
     mounted: function () {

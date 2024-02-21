@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import CreateStatement from '@/components/CreateStatement.vue'
 import StatementsList from '@/components/StatementsList.vue'
 import CreateParameter from '@/components/CreateParameter.vue'
+import ChangeParameter from '@/components/ChangeParameter.vue'
 import CreateClass from '@/components/CreateClass.vue'
 import SchemaList from '@/components/SchemaList.vue'
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/create_parameter',
     name: 'create_parameter',
     component: CreateParameter
+  },
+  {
+    path: '/change_parameter/:id',
+    name: 'change_parameter',
+    component: ChangeParameter
   },
   {
     path: '/create_class',
