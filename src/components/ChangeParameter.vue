@@ -105,7 +105,7 @@
     import 'vue-json-pretty/lib/styles.css';
     import vueJsonEditor from 'vue-json-editor'
     import CreateClass from '@/components/CreateClass.vue'
-    import api_url from '@/conf.js'
+    import {api_url} from '@/conf.js'
 
     export default {
         components: {

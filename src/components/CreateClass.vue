@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import api_url from '@/conf.js'
+import {api_url} from '@/conf.js'
 export default {
     name: 'create_class',
     data() {
