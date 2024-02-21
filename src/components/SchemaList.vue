@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {api_url} from '@/conf.js'
+import {api_url, site_url} from '@/conf.js'
 export default {
     name: 'create_class',
     data() {
@@ -57,7 +57,7 @@ export default {
             return item ? item : null;
         },
         getSchemaByContestOid: async function (id) {
-            window.location.href = api_url + '/change_parameter/' + id;
+            window.location.href = site_url + '/change_parameter/' + id;
         }
     },
     mounted: function () {
