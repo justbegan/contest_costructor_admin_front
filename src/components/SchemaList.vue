@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import api_url from '@/conf.js'
 export default {
     name: 'create_class',
     data() {
@@ -40,13 +41,13 @@ export default {
     },
     methods: {
         getSchemas: async function () {
-            let url = 'http://127.0.0.1:8000/schema/get_all';
+            let url = api_url + '/schema/get_all';
             let response = await fetch(url);
             let result = await response.json();
             this.schemasList = result.data
         },
         getAllCotests: async function () {
-            let url = 'http://127.0.0.1:8000/contes/get_contests';
+            let url = api_url + '/contes/get_contests';
             let response = await fetch(url);
             let result = await response.json();
             this.contestList = result.data
@@ -56,7 +57,7 @@ export default {
             return item ? item : null;
         },
         getSchemaByContestOid: async function (id) {
-            window.location.href = 'http://127.0.0.1:8080/change_parameter/' + id;
+            window.location.href = api_url + '/change_parameter/' + id;
         }
     },
     mounted: function () {

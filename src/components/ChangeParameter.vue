@@ -105,6 +105,7 @@
     import 'vue-json-pretty/lib/styles.css';
     import vueJsonEditor from 'vue-json-editor'
     import CreateClass from '@/components/CreateClass.vue'
+    import api_url from '@/conf.js'
 
     export default {
         components: {
@@ -177,13 +178,13 @@
                 return unknownKey
             },
             getParameters: async function () {
-                let url = 'http://127.0.0.1:8000/parameter/get_parameters';
+                let url = api_url + '/parameter/get_parameters';
                 let response = await fetch(url);
                 let result = await response.json();
                 this.list1 = result.data
             },
             createParameter: async function() {
-                let response = await fetch('http://127.0.0.1:8000/parameter/create_parameter', {
+                let response = await fetch(api_url + '/parameter/create_parameter', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8',
@@ -202,19 +203,19 @@
                 }
             },
             getContests: async function () {
-                let url = 'http://127.0.0.1:8000/contes/get_contests';
+                let url = api_url + '/contes/get_contests';
                 let response = await fetch(url);
                 let result = await response.json();
                 this.contests = result.data
             },
             getClass: async function () {
-                let url = 'http://127.0.0.1:8000/classificator/get_all_classificators';
+                let url = api_url + '/classificator/get_all_classificators';
                 let response = await fetch(url);
                 let result = await response.json();
                 this.classList = result.data
             },
             updateSchema: async function () {
-                let response = await fetch('http://127.0.0.1:8000/schema/update_schema?id=' + this.$route.params.id, {
+                let response = await fetch(api_url + '/schema/update_schema?id=' + this.$route.params.id, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8',
@@ -311,7 +312,7 @@
                 return filteredObject;
             },
             getSelectedParameter: async function (){
-                let url = 'http://127.0.0.1:8000/schema/get_parameter_by_id?id=' + this.$route.params.id;
+                let url = api_url + '/schema/get_parameter_by_id?id=' + this.$route.params.id;
                 let response = await fetch(url);
                 let result = await response.json();
                 this.list2 =  Object.keys(result.data.properties).map(key => ({ [key]: result.data.properties[key] }))

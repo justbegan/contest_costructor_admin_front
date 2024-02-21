@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import api_url from '@/conf.js'
 export default {
     name: 'StatementsList',
     data() {
@@ -36,13 +37,13 @@ export default {
     },
     methods: {
         getStatements: async function () {
-            let url = 'http://127.0.0.1:8000/statement/get_statements';
+            let url = api_url + '/statement/get_statements';
             let response = await fetch(url);
             let result = await response.json();
             this.statements = result
         },
         getSchema: async function () {
-            let url = 'http://127.0.0.1:8000/schema/get_schema?contest_oid=65a767c72e0fe1554e0d3c9a';
+            let url = api_url + '/schema/get_schema?contest_oid=65a767c72e0fe1554e0d3c9a';
             let response = await fetch(url);
             let result = await response.json();
             this.schema = result.data.properties

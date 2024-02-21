@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import api_url from '@/conf.js'
 export default {
     name: 'create_class',
     data() {
@@ -34,7 +35,7 @@ export default {
             })
         },
         createClassificator: async function(){
-            let response = await fetch('http://127.0.0.1:8000/classificator/create_classsificator', {
+            let response = await fetch(api_url + '/classificator/create_classsificator', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8',

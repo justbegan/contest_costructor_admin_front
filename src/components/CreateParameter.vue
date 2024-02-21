@@ -101,6 +101,7 @@
     import 'vue-json-pretty/lib/styles.css';
     import vueJsonEditor from 'vue-json-editor'
     import CreateClass from '@/components/CreateClass.vue'
+    import api_url from '@/conf.js'
 
     export default {
         components: {
@@ -173,13 +174,13 @@
                 return unknownKey
             },
             getParameters: async function () {
-                let url = 'http://127.0.0.1:8000/parameter/get_parameters';
+                let url = api_url + '/parameter/get_parameters';
                 let response = await fetch(url);
                 let result = await response.json();
                 this.list1 = result.data
             },
             createParameter: async function() {
-                let response = await fetch('http://127.0.0.1:8000/parameter/create_parameter', {
+                let response = await fetch(api_url + '/parameter/create_parameter', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8',
@@ -198,19 +199,19 @@
                 }
             },
             getContests: async function () {
-                let url = 'http://127.0.0.1:8000/contes/get_contests';
+                let url = api_url + '/contes/get_contests';
                 let response = await fetch(url);
                 let result = await response.json();
                 this.contests = result.data
             },
             getClass: async function () {
-                let url = 'http://127.0.0.1:8000/classificator/get_all_classificators';
+                let url = api_url + '/classificator/get_all_classificators';
                 let response = await fetch(url);
                 let result = await response.json();
                 this.classList = result.data
             },
             createSchema: async function () {
-                let response = await fetch('http://127.0.0.1:8000/schema/create_schema', {
+                let response = await fetch( api_url + '/schema/create_schema', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=utf-8',

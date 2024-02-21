@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import api_url from '@/conf.js'
 export default {
     name: 'CreateStatement',
     data() {
@@ -91,7 +92,7 @@ export default {
             this.testObj = {}
         },
         getSchema: async function () {
-            let url = 'http://127.0.0.1:8000/schema/get_schema?contest_oid=65a767c72e0fe1554e0d3c9a';
+            let url = api_url + '/schema/get_schema?contest_oid=65a767c72e0fe1554e0d3c9a';
             let response = await fetch(url);
             let result = await response.json();
             this.schema = result.data.properties
@@ -113,7 +114,7 @@ export default {
             }
         },
         createStatement: async function(){
-            let response = await fetch('http://127.0.0.1:8000/statement/create_statement?contest_oid=65a767c72e0fe1554e0d3c9a', {
+            let response = await fetch( api_url + '/statement/create_statement?contest_oid=65a767c72e0fe1554e0d3c9a', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -128,7 +129,7 @@ export default {
             }
         },
         getClassificatorById: async function(id){
-            let url = 'http://127.0.0.1:8000/classificator/get_classificator?id=' + id;
+            let url = api_url + '/classificator/get_classificator?id=' + id;
             let response = await fetch(url);
             let result = await response.json();
             this.classificators[result.data._id] = result.data.data
